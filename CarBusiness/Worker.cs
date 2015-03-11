@@ -27,23 +27,13 @@ namespace CarBusiness
             this.plant = plant;
         }
 
-        public void run() //apparently threads in c# don't like parameters
+        public void run()
         {
-            doJob(plant);
-        }
-
-        private void doJob(CarFactory plant)
-        {
-            Car newCar;
             Console.WriteLine("Worker " + workerNum + " signing in");
             Thread.Sleep(1000);
             while (!stop) //main loop for running
             {
-                newCar = plant.create(workerNum); //make cars!
-                Console.WriteLine(newCar.message());
-
-                //to vary sleep times between threads
-                Thread.Sleep(1000 + workerNum*500);
+                doJob();
             }
             Console.WriteLine("Worker " + workerNum + " signing off");
         }
@@ -54,6 +44,15 @@ namespace CarBusiness
             {
                 stop = true;
             }
+        }
+
+        private void doJob() //quantum of work
+        {
+            Car newCar = plant.create(workerNum); //make cars!
+            Console.WriteLine(newCar.message());
+
+            //to vary sleep times between threads
+            Thread.Sleep(1000 + workerNum*500);
         }
     }
 }
